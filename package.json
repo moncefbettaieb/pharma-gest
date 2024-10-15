@@ -6,7 +6,8 @@
         "dev:clean": "rm -rf node_modules && rm -rf package-lock.json && npm i --force && nuxt dev",
         "generate": "nuxt generate",
         "preview": "nuxt preview",
-        "postinstall": "nuxt prepare"
+        "postinstall": "nuxt prepare",
+        "start": "nuxt start"
     },
     "author": {
         "email": "mbettaieb@gcdconsulting.fr",
@@ -14,6 +15,7 @@
         "url": "https://gcdconsulting.fr"
     },
     "devDependencies": {
+        "@nuxt/icon": "^1.5.6",
         "@nuxtjs/tailwindcss": "^6.11.4",
         "@sidebase/nuxt-auth": "^0.7.2",
         "@types/bcrypt": "^5.0.2",
@@ -36,6 +38,9 @@
         "vee-validate": "^4.12.6",
         "vue-toastification": "next",
         "vue3-easy-data-table": "^1.5.47"
+    },
+    "optionalDependencies": {
+        "@rollup/rollup-linux-x64-gnu": "4.9.5"
     },
     "overrides": {
         "vue": "latest"

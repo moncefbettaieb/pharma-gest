@@ -1,0 +1,49 @@
+services:
+  # Service pour ton application Nuxt.js
+  app:
+    build: .
+    container_name: pharma-gest-web
+    restart: always
+    ports:
+      - "3000:3000"  # Le port que tu utilises pour l'application Nuxt
+    environment:
+      MONGO_URI: mongodb://myuser:mypassword@mongo:27017/nuxt-crud # URL de connexion MongoDB
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+    depends_on:
+      - mongo  # Indique que l'application dépend de MongoDB
+    command: npm run dev  # Ou npm run start pour la production
+    # Service Postgres
+  postgres:
+     image: postgres:latest
+     container_name: postgres
+     restart: always
+     environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+     ports:
+       - "5432:5432"
+     volumes:
+       - postgres-data:/var/lib/postgresql/data
+  # Service MongoDB
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=nuxt-crud
+      - MONGO_INITDB_ROOT_USERNAME= myuser
+      - MONGO_INITDB_ROOT_PASSWORD= mypassword
+    volumes:
+      - mongo-data:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
+volumes:
+  mongo-data:
+    driver: local
+  postgres-data:
+  node_modules:
