@@ -22,3 +22,14 @@ logs
 .env
 .env.*
 !.env.example
+
+.dist/
+.cache/
+
+# Si tu utilises un mode statique avec Nuxt
+static-dist/
+
+# Visual Studio Code
+.vscode/
+
+init-mongo.js
