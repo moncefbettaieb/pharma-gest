@@ -1,0 +1,72 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [development, staging, production]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform Init
+        run: terraform init
+        env:
+          TF_VAR_ENV: ${{ matrix.environment }}
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        env:
+          TF_VAR_ENV: ${{ matrix.environment }}
+
+      - name: Set up kubectl
+        uses: actions-hub/kubectl@master
+        with:
+         version: 'latest'
+
+      - name: Deploy to ${{ matrix.environment }}
+        run: |
+          echo "Deploying to ${{ matrix.environment }} environment"
+          if [ "${{ matrix.environment }}" == "development" ]; then
+            # Deploy to dev environment
+            # kubectl apply -f dev-config.yaml
+          elif [ "${{ matrix.environment }}" == "staging" ]; then
+            # Deploy to UAT environment
+            # kubectl apply -f uat-config.yaml
+          elif [ "${{ matrix.environment }}" == "production" ]; then
+            # Deploy to production
+            # kubectl apply -f prod-config.yaml
+          fi
+
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f ./.k8s/${{ matrix.environment }}/dev-config.yaml  # Applique le fichier de config spécifique à l'environnement
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}  # Assure-toi que ce secret est configuré dans GitHub
+
+      - name: Notify deployment success
+        if: success()
+        run: echo "Deployment to ${{ matrix.environment }} was successful!"
