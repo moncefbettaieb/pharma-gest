@@ -3,7 +3,7 @@
     "scripts": {
         "build": "nuxt build",
         "dev": "nuxt dev",
-        "test:unit": "jest",
+        "test": "jest",
         "dev:clean": "rm -rf node_modules && rm -rf package-lock.json && npm i --force && nuxt dev",
         "generate": "nuxt generate",
         "preview": "nuxt preview",
