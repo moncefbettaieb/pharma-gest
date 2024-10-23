@@ -5,6 +5,7 @@
 .nitro
 .cache
 dist
+expose/
 
 # Node dependencies
 node_modules
@@ -33,3 +34,5 @@ static-dist/
 .vscode/
 
 init-mongo.js
+.terraform/
+.terraform.*

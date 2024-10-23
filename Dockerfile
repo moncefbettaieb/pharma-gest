@@ -4,9 +4,6 @@ FROM node:22-alpine
 # Créer un répertoire de travail
 WORKDIR /app
 
-# Installer le client MongoDB avec apk (gestionnaire de paquets d'Alpine)
-RUN apk add --no-cache mongodb-tools
-
 # Copier les fichiers package.json et package-lock.json
 COPY package*.json ./
 
